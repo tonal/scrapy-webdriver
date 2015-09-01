@@ -5,7 +5,7 @@ from time import sleep
 from mock import call, Mock
 from scrapy.crawler import CrawlerProcess
 from scrapy.http import Request
-from scrapy import log, signals
+from scrapy import signals
 from scrapy.settings import Settings
 from scrapy.spider import BaseSpider
 
