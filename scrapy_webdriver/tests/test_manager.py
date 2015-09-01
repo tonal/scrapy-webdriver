@@ -1,5 +1,6 @@
 from scrapy.crawler import Crawler
 from scrapy.settings import Settings
+from scrapy.spiders import CrawlSpider
 from selenium import webdriver
 
 from scrapy_webdriver.manager import WebdriverManager
@@ -29,19 +30,16 @@ class TestManager:
             pass
 
         settings = self.settings(WEBDRIVER_BROWSER='Firefox')
-        crawler = Crawler(Settings(values=settings))
-        crawler.configure()
+        crawler = Crawler(CrawlSpider, settings=Settings(values=settings))
         browser = WebdriverManager(crawler)
         assert issubclass(browser._browser, webdriver.Firefox)
 
         settings = self.settings(WEBDRIVER_BROWSER=TestBrowser)
-        crawler = Crawler(Settings(values=settings))
-        crawler.configure()
+        crawler = Crawler(CrawlSpider, settings=Settings(values=settings))
         browser = WebdriverManager(crawler)
         assert issubclass(browser._browser, TestBrowser)
 
         settings = self.settings(WEBDRIVER_BROWSER=TestBrowser())
-        crawler = Crawler(Settings(values=settings))
-        crawler.configure()
+        crawler = Crawler(CrawlSpider, settings=Settings(values=settings))
         browser = WebdriverManager(crawler)
         assert isinstance(browser._webdriver, TestBrowser)
