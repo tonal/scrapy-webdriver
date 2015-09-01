@@ -1,14 +1,13 @@
 from functools import partial
+import logging
 from time import sleep
 
 from mock import call, Mock
-from scrapy.crawler import Crawler
+from scrapy.crawler import CrawlerProcess
 from scrapy.http import Request
 from scrapy import log, signals
 from scrapy.settings import Settings
 from scrapy.spider import BaseSpider
-from scrapy.xlib.pydispatch import dispatcher
-from twisted.internet import reactor
 
 from scrapy_webdriver.http import WebdriverRequest
 
@@ -32,9 +31,6 @@ class TestRequestQueue:
         settings.update(**options)
         return settings
 
-    def _stop_reactor(self):
-        reactor.stop()
-
     def _wait(self, url, *args, **kwargs):
         sleep(0.1)
 
@@ -44,15 +40,10 @@ class TestRequestQueue:
         webdriver.get.side_effect = self._wait
         webdriver.page_source = u''
 
-        dispatcher.connect(self._stop_reactor, signal=signals.spider_closed)
-
-        crawler = Crawler(Settings(values=settings))
-        crawler.configure()
-        spider = self.Spider(name='test', domain='testdomain')
-        crawler.crawl(spider)
-        crawler.start()
-        log.start(loglevel='ERROR')
-        reactor.run()
+        process = CrawlerProcess(Settings(values=settings))
+        process.crawl(self.Spider, name='test', domain='testdomain')
+        logging.getLogger('scrapy').setLevel(logging.ERROR)
+        process.start()
 
         assert webdriver.get.mock_calls == [
             call('http://testdomain/path?wr=0'),
