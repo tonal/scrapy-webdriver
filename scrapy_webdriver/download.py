@@ -39,13 +39,13 @@ class WebdriverDownloadHandler(object):
     @inthread
     def _download_request(self, request, spider):
         """Download a request URL using webdriver."""
-        logging.debug('Downloading %s with webdriver' % request.url)
+        logging.debug(u'Downloading %s with webdriver' % request.url)
         request.manager.webdriver.get(request.url)
         return WebdriverResponse(request.url, request.manager.webdriver)
 
     @inthread
     def _do_action_request(self, request, spider):
         """Perform an action on a previously webdriver-loaded page."""
-        logging.debug('Running webdriver actions %s' % request.url)
+        logging.debug(u'Running webdriver actions %s' % request.url)
         request.actions.perform()
         return WebdriverResponse(request.url, request.manager.webdriver)
