@@ -20,7 +20,7 @@ class WebdriverManager(object):
         self._user_agent = crawler.settings.get('USER_AGENT', None)
         self._options = crawler.settings.get('WEBDRIVER_OPTIONS', dict())
         self._webdriver = None
-        if isinstance(self._browser, basestring):
+        if isinstance(self._browser, str):
             if '.' in self._browser:
                 module, browser = self._browser.rsplit('.', 2)
             else:

@@ -59,7 +59,7 @@ class TestRequestQueue:
 
     class Spider(BaseSpider):
         def start_requests(self):
-            for i in xrange(2):
+            for i in range(2):
                 yield WebdriverRequest('http://testdomain/path?wr=%d' % i)
                 yield Request('http://testdomain/path?r=%d' % i)
 
@@ -67,7 +67,7 @@ class TestRequestQueue:
             def get(url):
                 response.webdriver.get(url)
 
-            for i in xrange(2):
+            for i in range(2):
                 fake_url = '%s&wa=%d' % (response.url, i)
                 request = response.action_request(url=fake_url,
                                                   callback=self.parse_action)
